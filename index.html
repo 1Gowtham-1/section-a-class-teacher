@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>balvikas teacher portal</title>
+    <style>
+        /* Base Styles */
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1, h2, h3 {
+            color: #0056b3;
+            text-align: center;
+            margin-top: 0;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Login Screen Styles */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 40px);
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .login-box {
+            background: linear-gradient(135deg, #e0e9f1, #c8dae9);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            transition: transform 0.3s ease;
+        }
+        
+        .login-box:hover {
+            transform: translateY(-5px);
+        }
+        
+        .login-box label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        
+        .login-box input[type="password"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .login-box input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+        }
+        
+        .login-box button {
+            padding: 12px 25px;
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-box button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .login-message {
+            color: #d9534f;
+            margin-top: 15px;
+            font-weight: 500;
+            min-height: 24px;
+        }
+        
+        /* Portal Content */
+        .portal-content {
+            display: none;
+        }
+        
+        .top-buttons {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .top-buttons button {
+            background: linear-gradient(to right, #6c757d, #5a6268);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .top-buttons button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Main Menu */
+        .main-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .main-menu button {
+            padding: 15px;
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            height: 100%;
+            min-height: 70px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .main-menu button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Section Content */
+        .section-content {
+            display: none;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            margin-top: 20px;
+        }
+        
+        .sub-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .sub-options button {
+            padding: 10px 15px;
+            background: linear-gradient(to right, #28a745, #218838);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            flex: 1 0 auto;
+            min-width: 120px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sub-options button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+        
+        .sub-section-content {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid #eee;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input[type="text"],
+        input[type="date"],
+        input[type="password"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="text"]:focus,
+        input[type="date"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        button[type="submit"] {
+            padding: 12px 25px;
+            background: linear-gradient(to right, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 25px auto 10px;
+            width: 100%;
+            max-width: 250px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        button[type="submit"]:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        button[type="submit"]:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        /* Messages */
+        .message {
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Attendance Styles */
+        .student-checkbox-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            border: 1px solid #eee;
+            padding: 12px;
+            background-color: #fff;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .student-checkbox-row:hover {
+            transform: translateX(5px);
+            border-color: #007bff;
+        }
+        
+        .student-checkbox-row label.student-label {
+            flex-grow: 1;
+            margin-bottom: 0;
+            font-weight: normal;
+            font-size: 1.05rem;
+        }
+        
+        .student-checkbox-row input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+        }
+        
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        td {
+            padding: 10px 15px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* Loading Spinner */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .spinner {
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            margin-top: 20px;
+            font-size: 1.3rem;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        /* Teacher Info */
+        .teacher-info {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .teacher-info h3 {
+            margin: 0;
+            color: #1976d2;
+        }
+        
+        /* Mobile-specific Styles */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+                border-radius: 10px;
+            }
+            
+            h1 {
+                font-size: 1.6rem;
+            }
+            
+            h2 {
+                font-size: 1.4rem;
+            }
+            
+            h3 {
+                font-size: 1.2rem;
+            }
+            
+            .main-menu {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            
+            .main-menu button {
+                padding: 15px 10px;
+                font-size: 1rem;
+            }
+            
+            .sub-options {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .sub-options button {
+                width: 100%;
+                padding: 12px;
+            }
+            
+            .login-box {
+                padding: 20px;
+            }
+            
+            .teacher-info {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+            
+            .section-content {
+                padding-top: 15px;
+                margin-top: 15px;
+            }
+            
+            .sub-section-content {
+                padding: 15px;
+            }
+            
+            button[type="submit"] {
+                padding: 14px;
+                font-size: 1rem;
+                max-width: 100%;
+            }
+            
+            .student-checkbox-row {
+                padding: 10px;
+            }
+            
+            .student-checkbox-row label.student-label {
+                font-size: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 12px;
+            }
+            
+            .login-box {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .teacher-info h3 {
+                font-size: 1.1rem;
+            }
+            
+            .main-menu button {
+                min-height: 60px;
+                font-size: 0.95rem;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            input[type="text"],
+            input[type="date"],
+            input[type="password"],
+            input[type="number"],
+            textarea,
+            select {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+            
+            .sub-section-content {
+                padding: 12px;
+            }
+            
+            table {
+                font-size: 0.9rem;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p class="loading-text">Processing...</p>
+    </div>
+
+    <div class="container">
+        <div id="loginScreen" class="login-container">
+            <div class="login-box">
+                <h1 id="loginPortalTitle">GROUP-2(A) Balvikas Class Teacher Portal Login</h1>
+                <label for="portalPassword">Enter Teacher Password:</label>
+                <input type="password" id="portalPassword" onkeydown="handleLoginEnter(event)" required autofocus>
+                <button onclick="checkPortalPassword()">Login</button>
+                <p id="loginMessage" class="login-message"></p>
+            </div>
+        </div>
+
+        <div id="portalContent" class="portal-content">
+            <div class="top-buttons">
+                <button onclick="goToDashboard()">Go to Dashboard</button>
+            </div>
+            <h1 id="teacherPortalTitle">Group-2(A) Class Teacher Portal</h1>
+<h1 >Welcome!! SRAVANI</h1> 
+            <div class="teacher-info">
+                <h3>NAME OF THE CLASS TEACHERs : SRAVANI VINDULA</h3>
+            </div>
+            
+            <div class="main-menu">
+                <button onclick="showSection('attendance')">Attendance</button>
+                <button onclick="showSection('syllabus')">Syllabus Status</button>
+                <button onclick="showSection('weeklyReport')">Weekly Report</button>
+                <button onclick="showSection('complaints')">Complaints</button>
+            </div>
+
+            <!-- Attendance Section -->
+            <div id="attendanceSection" class="section-content">
+                <h3>Attendance Management</h3>
+                <div class="sub-options">
+                    <button onclick="showAttendanceSubOption('uploadAttendance')">Upload Attendance</button>
+                    <button onclick="showAttendanceSubOption('addStudent')">Add Student</button>
+                    <button onclick="showAttendanceSubOption('checkAttendance')">Check Attendance</button>
+                    <button onclick="showAttendanceSubOption('studentSummary')">Student Summary</button>
+                </div>
+
+                <div id="uploadAttendanceContent" class="sub-section-content">
+                    <h4>Upload Attendance</h4>
+                    <div class="form-group">
+                        <label for="attendanceDate">Date:</label>
+                        <input type="date" id="attendanceDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Students:</label>
+                        <div id="studentCheckboxes"></div>
+                    </div>
+                    <button type="submit" onclick="submitAttendance(this)">Submit Attendance</button>
+                    <div id="uploadAttendanceMessage" class="message"></div>
+                </div>
+
+                <div id="addStudentContent" class="sub-section-content">
+                    <h4>Add New Student</h4>
+                    <div class="form-group">
+                        <label for="newStudentName">Student Name:</label>
+                        <input type="text" id="newStudentName" placeholder="Enter student name" required>
+                    </div>
+                    <button type="submit" onclick="addStudent(this)">Add Student</button>
+                    <div id="addStudentMessage" class="message"></div>
+                </div>
+
+                <div id="checkAttendanceContent" class="sub-section-content">
+                    <h4>Check Attendance by Date</h4>
+                    <div class="form-group">
+                        <label for="checkAttendanceDate">Date:</label>
+                        <input type="date" id="checkAttendanceDate" required>
+                    </div>
+                    <button type="submit" onclick="checkAttendance(this)">Check Attendance</button>
+                    <div id="checkedAttendanceDisplay"></div>
+                    <div id="checkAttendanceMessage" class="message"></div>
+                </div>
+
+                <div id="studentSummaryContent" class="sub-section-content">
+                    <h4>Student-wise Summary</h4>
+                    <div class="form-group">
+                        <label for="summaryStudentSelect">Select Student:</label>
+                        <select id="summaryStudentSelect" onchange="displayStudentSummary()"></select>
+                    </div>
+                    <div id="studentSummaryDisplay"></div>
+                    <div id="studentSummaryMessage" class="message"></div>
+                </div>
+            </div>
+
+            <!-- Syllabus Section -->
+                         <div id="syllabusSection" class="section-content">
+                <h3>Syllabus Completion Status</h3>
+                <label for="syllabusDate">Date:</label>
+                <input type="date" id="syllabusDate" required>
+                <div class="period-status">
+                    <label for="p1Status">Period 1: BAGAVADGITHA ,Padyasaaokthis --- CH.GOWTHAM</label>
+                    <select id="p1Status">
+                        <option value="Checked">✅ Checked</option>
+                        <option value="Not Checked">❌ Not Checked</option>
+                        <option value="Absent">🚫 Absent</option>
+                    </select>
+                </div>
+                <div class="period-status">
+                    <label for="p2Status">Period 2:Others---CH.GOWTHAM</label>
+                    <select id="p2Status">
+                        <option value="Checked">✅ Checked</option>
+                        <option value="Not Checked">❌ Not Checked</option>
+                        <option value="Absent">🚫 Absent</option>
+                    </select>
+                </div>
+                <div class="period-status">
+                    <label for="p3Status">Period 3:Bhajans --V.SRAVANI</label>
+                    <select id="p3Status">
+                        <option value="Checked">✅ Checked</option>
+                        <option value="Not Checked">❌ Not Checked</option>
+                        <option value="Absent">🚫 Absent</option>
+                    </select>
+                </div>
+                <div class="period-status">
+                    <label for="p4Status">Period 4: Extra CUrricular,B.S --P.SWAPNA SAI</label>
+                    <select id="p4Status">
+                        <option value="Checked">✅ Checked</option>
+                        <option value="Not Checked">❌ Not Checked</option>
+                        <option value="Absent">🚫 Absent</option>
+                    </select>
+                </div>
+                <div class="period-status">
+                    <label for="p5Status">Period 5:Bhaja Govindam & Prayers -- CH.Gowtham</label>
+                    <select id="p5Status">
+                        <option value="Checked">✅ Checked</option>
+                        <option value="Not Checked">❌ Not Checked</option>
+                        <option value="Absent">🚫 Absent</option>
+                    </select>
+                </div>
+                <div class="period-status">
+                    <label for="p6Status">Period 6:Group-Activity -- L.SAI VARSHA</label>
+                    <select id="p6Status">
+                        <option value="Checked">✅ Checked</option>
+                        <option value="Not Checked">❌ Not Checked</option>
+                        <option value="Absent">🚫 Absent</option>
+                    </select>
+                </div>
+
+                
+                <button type="submit" onclick="submitSyllabus(this)">Submit Syllabus Status</button>
+                <div id="syllabusMessage" class="message"></div>
+            </div>
+
+            <!-- Weekly Report Section -->
+            <div id="weeklyReportSection" class="section-content">
+                <h3>Weekly Report</h3>
+                <div class="form-group">
+                    <label for="weeklyReportDate">Week Ending Date:</label>
+                    <input type="date" id="weeklyReportDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="numBoys">Number of Boys:</label>
+                    <input type="number" id="numBoys" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="numGirls">Number of Girls:</label>
+                    <input type="number" id="numGirls" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="period1Notes">Period 1: Syllabus covered for BAGAVAVADGITHA ,Padyasaaokthis --- CH.GOWTHAM</label>
+                    <textarea id="period1Notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="period2Notes">Period 2 :Syllabus Covered for Others---CH.GOWTHAM</label>
+                    <textarea id="period2Notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="period3Notes">Period 3 :Syllabus Covered for Bhajans --V.SRAVANI</label>
+                    <textarea id="period3Notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="period4Notes">Period 4 :Syllabus Covered for Extra Curricular,B.S --P.SWAPNA SAI</label>
+                    <textarea id="period4Notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="period5Notes">Period 5:Bhaja Govindam & Prayers -- CH.Gowtham</label>
+                    <textarea id="period5Notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="period6Notes">Period 6: Syllabus Covered for Group-Activity -- L.SAI VARSHA</label>
+                    <textarea id="period6Notes" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="culturalActivities">Cultural Activities:</label>
+                    <textarea id="culturalActivities" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="generalComplaints">General Complaints / Observations:</label>
+                    <textarea id="generalComplaints" rows="4"></textarea>
+                </div>
+                
+                <button type="submit" onclick="submitWeeklyReport(this)">Submit Weekly Report</button>
+                <div id="weeklyReportMessage" class="message"></div>
+            </div>
+
+            <!-- Complaints Section -->
+            <div id="complaintsSection" class="section-content">
+                <h3>Complaints Management</h3>
+                <div class="form-group">
+                    <label for="complaintType">Type:</label>
+                    <select id="complaintType">
+                        <option value="Student">Student</option>
+                        <option value="Faculty">Faculty</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="complaintName">Name:</label>
+                    <input type="text" id="complaintName" placeholder="Student or Faculty Name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="complaintText">Complaint:</label>
+                    <textarea id="complaintText" rows="6" required></textarea>
+                </div>
+                
+                <button type="submit" onclick="submitComplaint(this)">Submit Complaint</button>
+                <div id="complaintsMessage" class="message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // !!! IMPORTANT: REPLACE WITH YOUR DEPLOYED GOOGLE APPS SCRIPT WEB APP URL !!!
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNcm2U5VrXiBlZfHRjrXRZVn8MGFAwqVcoYtz1oiBSAULLUc-ozi1IbPn0bugRznnX/exec'; 
+
+        // !!! SET THE UNIQUE PASSWORD FOR THIS SPECIFIC TEACHER'S PORTAL HERE !!!
+        const TEACHER_PORTAL_PASSWORD = "sravani@g2act"; // <--- CHANGE THIS FOR EACH TEACHER'S FILE
+
+        // Function to go back to the main dashboard
+        function goToDashboard() {
+            window.location.href = 'index.html';
+        }
+
+        // Handle Enter key for login
+        function handleLoginEnter(event) {
+            if (event.key === 'Enter') {
+                checkPortalPassword();
+            }
+        }
+
+        // Check password and reveal portal content
+        function checkPortalPassword() {
+            const enteredPassword = document.getElementById('portalPassword').value;
+            const loginMessage = document.getElementById('loginMessage');
+            const loginScreen = document.getElementById('loginScreen');
+            const portalContent = document.getElementById('portalContent');
+
+            if (enteredPassword === TEACHER_PORTAL_PASSWORD) {
+                loginMessage.textContent = '';
+                loginScreen.style.display = 'none';
+                portalContent.style.display = 'block';
+                initializePortalContent();
+            } else {
+                loginMessage.textContent = 'Incorrect password. Please try again.';
+                document.getElementById('portalPassword').value = '';
+            }
+        }
+
+        // Initialize portal content after successful login
+        function initializePortalContent() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('attendanceDate').value = today;
+            document.getElementById('checkAttendanceDate').value = today;
+            document.getElementById('syllabusDate').value = today;
+            document.getElementById('weeklyReportDate').value = today;
+            
+            const fileName = window.location.pathname.split('/').pop();
+            let groupName = "GROUP-2(A) Section";
+            if (fileName.includes('group1Portal')) groupName = "Group-1 (Baby Class)";
+            else if (fileName.includes('group2aPortal')) groupName = "Group-2(A)";
+            else if (fileName.includes('group2bPortal')) groupName = "Group-2(B)";
+            else if (fileName.includes('group3Portal')) groupName = "Group-3";
+            else if (fileName.includes('group4Portal')) groupName = "Group-4";
+            else if (fileName.includes('group5Portal')) groupName = "Group-5";
+
+            document.getElementById('teacherPortalTitle').innerText = `${groupName} Balvikas Class Teacher Portal`;
+            document.getElementById('loginPortalTitle').innerText = `${groupName} Balvikas Teacher Portal Login`;
+
+            fetchStudentList();
+            showSection('attendance');
+        }
+
+        // Auto-focus on password field on page load
+        window.onload = function() {
+            document.getElementById('portalPassword').focus();
+        };
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById(sectionId + 'Section').style.display = 'block';
+            document.querySelectorAll('.message').forEach(msg => msg.innerHTML = '');
+
+            if (sectionId === 'attendance') {
+                showAttendanceSubOption('uploadAttendance');
+                fetchStudentList();
+            }
+        }
+
+        function showAttendanceSubOption(subOptionId) {
+            document.querySelectorAll('.sub-section-content').forEach(subSection => {
+                subSection.style.display = 'none';
+            });
+            document.getElementById(subOptionId + 'Content').style.display = 'block';
+            document.querySelectorAll('.message').forEach(msg => msg.innerHTML = '');
+            if (subOptionId === 'uploadAttendance') {
+                fetchStudentList();
+            } else if (subOptionId === 'studentSummary') {
+                fetchStudentListForSummary();
+            }
+        }
+
+        // --- UI Feedback Functions ---
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function displayMessage(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.className = 'message ' + type;
+            element.innerHTML = message;
+        }
+
+        function displayMessageWithDelay(elementId, message, type, delay = 3000) {
+            displayMessage(elementId, message, type);
+            setTimeout(() => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    element.innerHTML = '';
+                    element.className = 'message';
+                }
+            }, delay);
+        }
+
+        function disableButton(button) {
+            if (button) {
+                button.disabled = true;
+                button.originalText = button.textContent;
+                button.textContent = 'Submitting...';
+            }
+        }
+
+        function enableButton(button) {
+            if (button) {
+                button.disabled = false;
+                if (button.originalText) {
+                    button.textContent = button.originalText;
+                }
+            }
+        }
+
+        // --- Helper Functions for API Calls ---
+        async function fetchData(action, params = {}) {
+            showLoading();
+            const url = new URL(SCRIPT_URL);
+            url.searchParams.append('action', action);
+            for (const key in params) {
+                url.searchParams.append(key, params[key]);
+            }
+
+            try {
+                const response = await fetch(url.toString());
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                hideLoading();
+                return data;
+            } catch (error) {
+                console.error('Fetch error:', error);
+                hideLoading();
+                return { success: false, message: 'Network error or invalid response.' };
+            }
+        }
+
+        async function postData(action, payload, messageElementId, submitButton) {
+            disableButton(submitButton);
+            showLoading();
+            const url = SCRIPT_URL;
+            const data = { action: action, ...payload };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data).toString()
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayMessageWithDelay(messageElementId, result.message, 'success');
+                } else {
+                    displayMessageWithDelay(messageElementId, 'Error: ' + result.message, 'error');
+                }
+                return result;
+            } catch (error) {
+                console.error('Post error:', error);
+                displayMessageWithDelay(messageElementId, 'Error submitting data: ' + error.message, 'error');
+                return { success: false, message: 'Network error or invalid response.' };
+            } finally {
+                hideLoading();
+                enableButton(submitButton);
+            }
+        }
+
+        // --- Attendance Functions ---
+        async function fetchStudentList() {
+            const studentCheckboxesDiv = document.getElementById('studentCheckboxes');
+            studentCheckboxesDiv.innerHTML = '<div class="loading-text">Loading students...</div>';
+            const data = await fetchData('getStudentList');
+
+            if (data.success) {
+                studentCheckboxesDiv.innerHTML = '';
+                if (data.students && data.students.length > 0) {
+                    data.students.forEach(student => {
+                        const div = document.createElement('div');
+                        div.className = 'student-checkbox-row';
+                        div.innerHTML = `
+                            <input type="checkbox" id="student-${student.replace(/\s/g, '-')}" value="${student}" checked>
+                            <label for="student-${student.replace(/\s/g, '-')}" class="student-label">${student}</label>
+                        `;
+                        studentCheckboxesDiv.appendChild(div);
+                    });
+                } else {
+                    studentCheckboxesDiv.innerHTML = '<div class="message error">No students found. Add students using "Add Student" option.</div>';
+                }
+            } else {
+                studentCheckboxesDiv.innerHTML = `<div class="message error">Error loading students: ${data.message}</div>`;
+            }
+        }
+
+        async function submitAttendance(button) {
+            const date = document.getElementById('attendanceDate').value;
+            const studentsPresent = [];
+            const studentsAbsent = [];
+            const studentCheckboxes = document.querySelectorAll('#studentCheckboxes input[type="checkbox"]');
+
+            if (!date) {
+                displayMessage('uploadAttendanceMessage', 'Please select a date.', 'error');
+                return;
+            }
+
+            if (studentCheckboxes.length === 0) {
+                displayMessage('uploadAttendanceMessage', 'No students to submit attendance for. Please add students first.', 'error');
+                return;
+            }
+
+            studentCheckboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    studentsPresent.push(checkbox.value);
+                } else {
+                    studentsAbsent.push(checkbox.value);
+                }
+            });
+
+            if (studentsAbsent.length > 0) {
+                const confirmation = confirm(`The following students are marked Absent:\n${studentsAbsent.join('\n')}\n\nConfirm submission?`);
+                if (!confirmation) {
+                    return;
+                }
+            } else {
+                 const confirmation = confirm(`All students are marked Present. Confirm submission?`);
+                 if (!confirmation) {
+                    return;
+                }
+            }
+
+            const response = await postData('submitAttendance', {
+                date: date,
+                present: studentsPresent.join(','),
+                absent: studentsAbsent.join(',')
+            }, 'uploadAttendanceMessage', button);
+
+            if (response.success) {
+                document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+            }
+        }
+
+        async function addStudent(button) {
+            const studentName = document.getElementById('newStudentName').value.trim();
+
+            if (!studentName) {
+                displayMessage('addStudentMessage', 'Please enter a student name.', 'error');
+                return;
+            }
+            
+            const response = await postData('addStudent', {
+                studentName: studentName
+            }, 'addStudentMessage', button);
+
+            if (response.success) {
+                document.getElementById('newStudentName').value = '';
+                fetchStudentList();
+                fetchStudentListForSummary();
+            }
+        }
+
+        async function checkAttendance(button) {
+            const date = document.getElementById('checkAttendanceDate').value;
+            const displayDiv = document.getElementById('checkedAttendanceDisplay');
+            const messageDiv = document.getElementById('checkAttendanceMessage');
+
+            if (!date) {
+                displayMessage('checkAttendanceMessage', 'Please select a date.', 'error');
+                return;
+            }
+
+            displayDiv.innerHTML = '<div class="loading-text">Loading attendance...</div>';
+            messageDiv.innerHTML = '';
+            disableButton(button);
+            showLoading();
+
+            try {
+                const data = await fetchData('getAttendanceByDate', { date: date });
+
+                if (data.success) {
+                    if (data.attendance && data.attendance.length > 0) {
+                        let html = '<h4>Attendance for ' + date + '</h4>';
+                        html += '<div style="overflow-x: auto;"><table><thead><tr><th>Student</th><th>Status</th></tr></thead><tbody>';
+                        data.attendance.forEach(record => {
+                            html += `<tr><td>${record.student}</td><td>${record.status}</td></tr>`;
+                        });
+                        html += '</tbody></table></div>';
+                        displayDiv.innerHTML = html;
+                    } else {
+                        displayDiv.innerHTML = '<div class="message">No attendance records found for this date. Ensure date is correctly selected or attendance was logged.</div>';
+                    }
+                } else {
+                    displayMessageWithDelay('checkAttendanceMessage', 'Error fetching attendance: ' + data.message, 'error');
+                    displayDiv.innerHTML = '';
+                }
+            } finally {
+                hideLoading();
+                enableButton(button);
+            }
+        }
+
+        async function fetchStudentListForSummary() {
+            const studentSelect = document.getElementById('summaryStudentSelect');
+            studentSelect.innerHTML = '<option value="">Loading students...</option>';
+
+            const data = await fetchData('getStudentList');
+            if (data.success) {
+                studentSelect.innerHTML = '<option value="">Select a student</option>';
+                data.students.forEach(student => {
+                    const option = document.createElement('option');
+                    option.value = student;
+                    option.textContent = student;
+                    studentSelect.appendChild(option);
+                });
+            } else {
+                studentSelect.innerHTML = '<option value="">Error loading students</option>';
+                displayMessageWithDelay('studentSummaryMessage', 'Error loading students for summary: ' + data.message, 'error');
+            }
+        }
+
+        async function displayStudentSummary() {
+            const studentName = document.getElementById('summaryStudentSelect').value;
+            const displayDiv = document.getElementById('studentSummaryDisplay');
+            const messageDiv = document.getElementById('studentSummaryMessage');
+
+            if (!studentName) {
+                displayDiv.innerHTML = '';
+                messageDiv.innerHTML = '';
+                return;
+            }
+
+            displayDiv.innerHTML = '<div class="loading-text">Loading summary...</div>';
+            messageDiv.innerHTML = '';
+            showLoading();
+
+            try {
+                const data = await fetchData('getStudentSummary', { studentName: studentName });
+
+                if (data.success) {
+                    if (data.summary) {
+                        const summary = data.summary;
+                        let html = `
+                            <div class="summary-card">
+                                <h4>Summary for ${summary.student}</h4>
+                                <p><strong>Total Days Classes Held:</strong> ${summary.totalDays}</p>
+                                <p><strong>Days Present:</strong> ${summary.daysPresent}</p>
+                                <p><strong>Attendance Percentage:</strong> ${summary.attendancePercentage}%</p>
+                            </div>
+                        `;
+                        displayDiv.innerHTML = html;
+                    } else {
+                        displayDiv.innerHTML = '<div class="message">No summary data found for this student. Ensure attendance records exist.</div>';
+                    }
+                } else {
+                    displayMessageWithDelay('studentSummaryMessage', 'Error fetching student summary: ' + data.message, 'error');
+                    displayDiv.innerHTML = '';
+                }
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // --- Syllabus Functions ---
+        async function submitSyllabus(button) {
+            const date = document.getElementById('syllabusDate').value;
+            const period1 = document.getElementById('p1Status').value;
+            const period2 = document.getElementById('p2Status').value;
+            const period3 = document.getElementById('p3Status').value;
+            const period4 = document.getElementById('p4Status').value;
+            const period5 = document.getElementById('p5Status').value;
+            const period6 = document.getElementById('p6Status').value;
+
+            if (!date || !period1 || !period2 || !period3 || !period4 || !period5 || !period6) {
+                displayMessage('syllabusMessage', 'Please fill all fields and select status for all periods.', 'error');
+                return;
+            }
+
+            const response = await postData('submitSyllabus', {
+                date: date,
+                period1: period1,
+                period2: period2,
+                period3: period3,
+                period4: period4,
+                period5: period5,
+                period6: period6
+            }, 'syllabusMessage', button);
+        }
+
+        // --- Weekly Report Functions ---
+        async function submitWeeklyReport(button) {
+            const date = document.getElementById('weeklyReportDate').value;
+            const numBoys = document.getElementById('numBoys').value;
+            const numGirls = document.getElementById('numGirls').value;
+            const period1Notes = document.getElementById('period1Notes').value;
+            const period2Notes = document.getElementById('period2Notes').value;
+            const period3Notes = document.getElementById('period3Notes').value;
+            const period4Notes = document.getElementById('period4Notes').value;
+            const period5Notes = document.getElementById('period5Notes').value;
+            const period6Notes = document.getElementById('period6Notes').value;
+            const culturalActivities = document.getElementById('culturalActivities').value;
+            const generalComplaints = document.getElementById('generalComplaints').value;
+
+            if (!date || numBoys === '' || numGirls === '') {
+                displayMessage('weeklyReportMessage', 'Please fill in all required fields (Date, Boys, Girls).', 'error');
+                return;
+            }
+
+            const response = await postData('submitWeeklyReport', {
+                date: date,
+                numBoys: numBoys,
+                numGirls: numGirls,
+                period1Notes: period1Notes,
+                period2Notes: period2Notes,
+                period3Notes: period3Notes,
+                period4Notes: period4Notes,
+                period5Notes: period5Notes,
+                period6Notes: period6Notes,
+                culturalActivities: culturalActivities,
+                generalComplaints: generalComplaints
+            }, 'weeklyReportMessage', button);
+        }
+
+        // --- Complaints Functions ---
+        async function submitComplaint(button) {
+            const complaintType = document.getElementById('complaintType').value;
+            const complaintName = document.getElementById('complaintName').value.trim();
+            const complaintText = document.getElementById('complaintText').value.trim();
+
+            if (!complaintName || !complaintText) {
+                displayMessage('complaintsMessage', 'Please fill in the name and complaint details.', 'error');
+                return;
+            }
+
+            const response = await postData('submitComplaint', {
+                type: complaintType,
+                name: complaintName,
+                complaint: complaintText
+            }, 'complaintsMessage', button);
+
+            if (response.success) {
+                document.getElementById('complaintName').value = '';
+                document.getElementById('complaintText').value = '';
+            }
+        }
+    </script>
+</body>
+</html>
