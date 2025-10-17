@@ -182,6 +182,11 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
         }
+
+        .back-to-menu-button {
+            background: linear-gradient(to right, #ffc107, #ff9800) !important;
+            color: #333 !important;
+        }
         
         /* Section Content */
         .section-content {
@@ -295,6 +300,15 @@
             cursor: not-allowed;
             opacity: 0.7;
         }
+
+        .small-admin-button {
+            padding: 8px 15px !important;
+            font-size: 0.9rem !important;
+            margin-top: 10px !important;
+            background: linear-gradient(to right, #ffc107, #ff9800) !important;
+            color: #333 !important;
+            max-width: 200px !important;
+        }
         
         /* Messages */
         .message {
@@ -314,6 +328,12 @@
             background-color: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
         }
         
         /* Attendance Styles */
@@ -574,213 +594,225 @@
                 <h3>NAME OF THE CLASS TEACHERs : SRAVANI VINDULA</h3>
             </div>
             
-            <div class="main-menu">
+            <div class="main-menu" id="mainMenu">
                 <button onclick="showSection('attendance')">Attendance</button>
                 <button onclick="showSection('syllabus')">Syllabus Status</button>
                 <button onclick="showSection('weeklyReport')">Weekly Report</button>
                 <button onclick="showSection('complaints')">Complaints</button>
             </div>
 
-            <!-- Attendance Section -->
-            <div id="attendanceSection" class="section-content">
-                <h3>Attendance Management</h3>
-                <div class="sub-options">
-                    <button onclick="showAttendanceSubOption('uploadAttendance')">Upload Attendance</button>
-                    <button onclick="showAttendanceSubOption('addStudent')">Add Student</button>
-                    <button onclick="showAttendanceSubOption('checkAttendance')">Check Attendance</button>
-                    <button onclick="showAttendanceSubOption('studentSummary')">Student Summary</button>
+            <div id="sectionWrapper" style="display: none;">
+                <div class="top-buttons">
+                    <button onclick="showMainMenu()" class="back-to-menu-button">Go Back to Menu</button>
                 </div>
 
-                <div id="uploadAttendanceContent" class="sub-section-content">
-                    <h4>Upload Attendance</h4>
-                    <div class="form-group">
-                        <label for="attendanceDate">Date:</label>
-                        <input type="date" id="attendanceDate" required>
+                <div id="attendanceSection" class="section-content">
+                    <h3>Attendance Management</h3>
+                    <div class="sub-options">
+                        <button onclick="showAttendanceSubOption('uploadAttendance')">Upload Attendance</button>
+                        <button onclick="showAttendanceSubOption('addStudent')">Add Student</button>
+                        <button onclick="showAttendanceSubOption('checkAttendance')">Check Attendance</button>
+                        <button onclick="showAttendanceSubOption('studentSummary')">Student Summary</button>
                     </div>
-                    <div class="form-group">
-                        <label>Students:</label>
-                        <div id="studentCheckboxes"></div>
+
+                    <div id="uploadAttendanceContent" class="sub-section-content">
+                        <h4>Upload Attendance</h4>
+                        <div class="form-group">
+                            <label for="attendanceDate">Date:</label>
+                            <input type="date" id="attendanceDate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Students:</label>
+                            <div id="studentCheckboxes"></div>
+                        </div>
+                        <button type="submit" id="submitAttendanceButton" onclick="submitAttendance(this)">Submit Attendance</button>
+                        
+                        <div id="adminOverrideSection" style="text-align: center; margin-top: 15px;">
+                            <p style="margin: 0; font-size: 0.9em; color: #555;">If the Weekly Report or Syllabus is missing, an Admin can override.</p>
+                            <button class="small-admin-button" onclick="promptAdminPassword()">Admin Override</button>
+                            <div id="adminPasswordInput" style="display:none; margin-top: 10px; max-width: 300px; margin-left: auto; margin-right: auto;">
+                                <input type="password" id="adminPassword" placeholder="Admin Password" onkeydown="handleAdminEnter(event)" required>
+                                <button class="small-admin-button" onclick="adminLogin()">Submit Admin Pass</button>
+                            </div>
+                        </div>
+
+                        <div id="uploadAttendanceMessage" class="message"></div>
                     </div>
-                    <button type="submit" onclick="submitAttendance(this)">Submit Attendance</button>
-                    <div id="uploadAttendanceMessage" class="message"></div>
-                </div>
 
-                <div id="addStudentContent" class="sub-section-content">
-                    <h4>Add New Student</h4>
-                    <div class="form-group">
-                        <label for="newStudentName">Student Name:</label>
-                        <input type="text" id="newStudentName" placeholder="Enter student name" required>
+                    <div id="addStudentContent" class="sub-section-content">
+                        <h4>Add New Student</h4>
+                        <div class="form-group">
+                            <label for="newStudentName">Student Name:</label>
+                            <input type="text" id="newStudentName" placeholder="Enter student name" required>
+                        </div>
+                        <button type="submit" onclick="addStudent(this)">Add Student</button>
+                        <div id="addStudentMessage" class="message"></div>
                     </div>
-                    <button type="submit" onclick="addStudent(this)">Add Student</button>
-                    <div id="addStudentMessage" class="message"></div>
-                </div>
 
-                <div id="checkAttendanceContent" class="sub-section-content">
-                    <h4>Check Attendance by Date</h4>
-                    <div class="form-group">
-                        <label for="checkAttendanceDate">Date:</label>
-                        <input type="date" id="checkAttendanceDate" required>
+                    <div id="checkAttendanceContent" class="sub-section-content">
+                        <h4>Check Attendance by Date</h4>
+                        <div class="form-group">
+                            <label for="checkAttendanceDate">Date:</label>
+                            <input type="date" id="checkAttendanceDate" required>
+                        </div>
+                        <button type="submit" onclick="checkAttendance(this)">Check Attendance</button>
+                        <div id="checkedAttendanceDisplay"></div>
+                        <div id="checkAttendanceMessage" class="message"></div>
                     </div>
-                    <button type="submit" onclick="checkAttendance(this)">Check Attendance</button>
-                    <div id="checkedAttendanceDisplay"></div>
-                    <div id="checkAttendanceMessage" class="message"></div>
-                </div>
 
-                <div id="studentSummaryContent" class="sub-section-content">
-                    <h4>Student-wise Summary</h4>
-                    <div class="form-group">
-                        <label for="summaryStudentSelect">Select Student:</label>
-                        <select id="summaryStudentSelect" onchange="displayStudentSummary()"></select>
+                    <div id="studentSummaryContent" class="sub-section-content">
+                        <h4>Student-wise Summary</h4>
+                        <div class="form-group">
+                            <label for="summaryStudentSelect">Select Student:</label>
+                            <select id="summaryStudentSelect" onchange="displayStudentSummary()"></select>
+                        </div>
+                        <div id="studentSummaryDisplay"></div>
+                        <div id="studentSummaryMessage" class="message"></div>
                     </div>
-                    <div id="studentSummaryDisplay"></div>
-                    <div id="studentSummaryMessage" class="message"></div>
-                </div>
-            </div>
-
-            <!-- Syllabus Section -->
-                         <div id="syllabusSection" class="section-content">
-                <h3>Syllabus Completion Status</h3>
-                <label for="syllabusDate">Date:</label>
-                <input type="date" id="syllabusDate" required>
-                <div class="period-status">
-                    <label for="p1Status"> BAGAVADGITHA ,Padyasaaokthis --- CH.GOWTHAM</label>
-                    <select id="p1Status">
-                        <option value="Checked">✅ Checked</option>
-                        <option value="Not Checked">❌ Not Checked</option>
-                        <option value="Absent">🚫 Absent</option>
-                    </select>
-                </div>
-                <div class="period-status">
-                    <label for="p2Status">Others---CH.GOWTHAM</label>
-                    <select id="p2Status">
-                        <option value="Checked">✅ Checked</option>
-                        <option value="Not Checked">❌ Not Checked</option>
-                        <option value="Absent">🚫 Absent</option>
-                    </select>
-                </div>
-                <div class="period-status">
-                    <label for="p3Status">Bhajans --V.SRAVANI</label>
-                    <select id="p3Status">
-                        <option value="Checked">✅ Checked</option>
-                        <option value="Not Checked">❌ Not Checked</option>
-                        <option value="Absent">🚫 Absent</option>
-                    </select>
-                </div>
-                <div class="period-status">
-                    <label for="p4Status"> Extra CUrricular,B.S -L.Sai Varsha</label>
-                    <select id="p4Status">
-                        <option value="Checked">✅ Checked</option>
-                        <option value="Not Checked">❌ Not Checked</option>
-                        <option value="Absent">🚫 Absent</option>
-                    </select>
-                </div>
-                <div class="period-status">
-                    <label for="p5Status">Bhaja Govindam & Prayers -- CH.Gowtham</label>
-                    <select id="p5Status">
-                        <option value="Checked">✅ Checked</option>
-                        <option value="Not Checked">❌ Not Checked</option>
-                        <option value="Absent">🚫 Absent</option>
-                    </select>
-                </div>
-                <div class="period-status">
-                    <label for="p6Status">Group-Activity -- V.Sravani</label>
-                    <select id="p6Status">
-                        <option value="Checked">✅ Checked</option>
-                        <option value="Not Checked">❌ Not Checked</option>
-                        <option value="Absent">🚫 Absent</option>
-                    </select>
                 </div>
 
-                
-                <button type="submit" onclick="submitSyllabus(this)">Submit Syllabus Status</button>
-                <div id="syllabusMessage" class="message"></div>
-            </div>
+                <div id="syllabusSection" class="section-content">
+                    <h3>Syllabus Completion Status</h3>
+                    <label for="syllabusDate">Date:</label>
+                    <input type="date" id="syllabusDate" required>
+                    <div class="period-status">
+                        <label for="p1Status"> BAGAVADGITHA ,Padyasaaokthis --- CH.GOWTHAM</label>
+                        <select id="p1Status">
+                            <option value="Checked">✅ Checked</option>
+                            <option value="Not Checked">❌ Not Checked</option>
+                            <option value="Absent">🚫 Absent</option>
+                        </select>
+                    </div>
+                    <div class="period-status">
+                        <label for="p2Status">Others---CH.GOWTHAM</label>
+                        <select id="p2Status">
+                            <option value="Checked">✅ Checked</option>
+                            <option value="Not Checked">❌ Not Checked</option>
+                            <option value="Absent">🚫 Absent</option>
+                        </select>
+                    </div>
+                    <div class="period-status">
+                        <label for="p3Status">Bhajans --V.SRAVANI</label>
+                        <select id="p3Status">
+                            <option value="Checked">✅ Checked</option>
+                            <option value="Not Checked">❌ Not Checked</option>
+                            <option value="Absent">🚫 Absent</option>
+                        </select>
+                    </div>
+                    <div class="period-status">
+                        <label for="p4Status"> Extra CUrricular,B.S -L.Sai Varsha</label>
+                        <select id="p4Status">
+                            <option value="Checked">✅ Checked</option>
+                            <option value="Not Checked">❌ Not Checked</option>
+                            <option value="Absent">🚫 Absent</option>
+                        </select>
+                    </div>
+                    <div class="period-status">
+                        <label for="p5Status">Bhaja Govindam & Prayers -- CH.Gowtham</label>
+                        <select id="p5Status">
+                            <option value="Checked">✅ Checked</option>
+                            <option value="Not Checked">❌ Not Checked</option>
+                            <option value="Absent">🚫 Absent</option>
+                        </select>
+                    </div>
+                    <div class="period-status">
+                        <label for="p6Status">Group-Activity -- V.Sravani</label>
+                        <select id="p6Status">
+                            <option value="Checked">✅ Checked</option>
+                            <option value="Not Checked">❌ Not Checked</option>
+                            <option value="Absent">🚫 Absent</option>
+                        </select>
+                    </div>
 
-            <!-- Weekly Report Section -->
-            <div id="weeklyReportSection" class="section-content">
-                <h3>Weekly Report</h3>
-                <div class="form-group">
-                    <label for="weeklyReportDate">Week Ending Date:</label>
-                    <input type="date" id="weeklyReportDate" required>
+                    
+                    <button type="submit" onclick="submitSyllabus(this)">Submit Syllabus Status</button>
+                    <div id="syllabusMessage" class="message"></div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="numBoys">Number of Boys:</label>
-                    <input type="number" id="numBoys" min="0" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="numGirls">Number of Girls:</label>
-                    <input type="number" id="numGirls" min="0" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="period1Notes"> Syllabus covered for BAGAVAVADGITHA ,Padyasaaokthis --- CH.GOWTHAM</label>
-                    <textarea id="period1Notes" rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="period2Notes">Syllabus Covered for Others---CH.GOWTHAM</label>
-                    <textarea id="period2Notes" rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="period3Notes">Syllabus Covered for Bhajans --V.SRAVANI</label>
-                    <textarea id="period3Notes" rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="period4Notes">Syllabus Covered for Extra Curricular --L.Sai VArsha</label>
-                    <textarea id="period4Notes" rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="period5Notes">Bhaja Govindam & Prayers -- CH.Gowtham</label>
-                    <textarea id="period5Notes" rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="period6Notes"> Name Of the  Group-Activity -- V.Sai varsha</label>
-                    <textarea id="period6Notes" rows="3"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="culturalActivities">Cultural Activities:</label>
-                    <textarea id="culturalActivities" rows="4"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="generalComplaints">General Complaints / Observations:</label>
-                    <textarea id="generalComplaints" rows="4"></textarea>
-                </div>
-                
-                <button type="submit" onclick="submitWeeklyReport(this)">Submit Weekly Report</button>
-                <div id="weeklyReportMessage" class="message"></div>
-            </div>
 
-            <!-- Complaints Section -->
-            <div id="complaintsSection" class="section-content">
-                <h3>Complaints Management</h3>
-                <div class="form-group">
-                    <label for="complaintType">Type:</label>
-                    <select id="complaintType">
-                        <option value="Student">Student</option>
-                        <option value="Faculty">Faculty</option>
-                    </select>
+                <div id="weeklyReportSection" class="section-content">
+                    <h3>Weekly Report</h3>
+                    <div class="form-group">
+                        <label for="weeklyReportDate">Week Ending Date:</label>
+                        <input type="date" id="weeklyReportDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="numBoys">Number of Boys:</label>
+                        <input type="number" id="numBoys" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="numGirls">Number of Girls:</label>
+                        <input type="number" id="numGirls" min="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="period1Notes"> Syllabus covered for BAGAVAVADGITHA ,Padyasaaokthis --- CH.GOWTHAM</label>
+                        <textarea id="period1Notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="period2Notes">Syllabus Covered for Others---CH.GOWTHAM</label>
+                        <textarea id="period2Notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="period3Notes">Syllabus Covered for Bhajans --V.SRAVANI</label>
+                        <textarea id="period3Notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="period4Notes">Syllabus Covered for Extra Curricular --L.Sai VArsha</label>
+                        <textarea id="period4Notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="period5Notes">Bhaja Govindam & Prayers -- CH.Gowtham</label>
+                        <textarea id="period5Notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="period6Notes"> Name Of the  Group-Activity -- V.Sai varsha</label>
+                        <textarea id="period6Notes" rows="3"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="culturalActivities">Cultural Activities:</label>
+                        <textarea id="culturalActivities" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="generalComplaints">General Complaints / Observations:</label>
+                        <textarea id="generalComplaints" rows="4"></textarea>
+                    </div>
+                    
+                    <button type="submit" onclick="submitWeeklyReport(this)">Submit Weekly Report</button>
+                    <div id="weeklyReportMessage" class="message"></div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="complaintName">Name:</label>
-                    <input type="text" id="complaintName" placeholder="Student or Faculty Name" required>
+
+                <div id="complaintsSection" class="section-content">
+                    <h3>Complaints Management</h3>
+                    <div class="form-group">
+                        <label for="complaintType">Type:</label>
+                        <select id="complaintType">
+                            <option value="Student">Student</option>
+                            <option value="Faculty">Faculty</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="complaintName">Name:</label>
+                        <input type="text" id="complaintName" placeholder="Student or Faculty Name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="complaintText">Complaint:</label>
+                        <textarea id="complaintText" rows="6" required></textarea>
+                    </div>
+                    
+                    <button type="submit" onclick="submitComplaint(this)">Submit Complaint</button>
+                    <div id="complaintsMessage" class="message"></div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="complaintText">Complaint:</label>
-                    <textarea id="complaintText" rows="6" required></textarea>
-                </div>
-                
-                <button type="submit" onclick="submitComplaint(this)">Submit Complaint</button>
-                <div id="complaintsMessage" class="message"></div>
             </div>
         </div>
     </div>
@@ -791,6 +823,10 @@
 
         // !!! SET THE UNIQUE PASSWORD FOR THIS SPECIFIC TEACHER'S PORTAL HERE !!!
         const TEACHER_PORTAL_PASSWORD = "sravani@g2act"; // <--- CHANGE THIS FOR EACH TEACHER'S FILE
+        const ADMIN_PASSWORD = "admingow123";
+
+        // Global flag to track admin override status
+        let isAdminLoggedIn = false;
 
         // Function to go back to the main dashboard
         function goToDashboard() {
@@ -801,6 +837,13 @@
         function handleLoginEnter(event) {
             if (event.key === 'Enter') {
                 checkPortalPassword();
+            }
+        }
+
+        // Handle Enter key for admin login
+        function handleAdminEnter(event) {
+            if (event.key === 'Enter') {
+                adminLogin();
             }
         }
 
@@ -842,8 +885,7 @@
             document.getElementById('teacherPortalTitle').innerText = `${groupName} Balvikas Class Teacher Portal`;
             document.getElementById('loginPortalTitle').innerText = `${groupName} Balvikas Teacher Portal Login`;
 
-            fetchStudentList();
-            showSection('attendance');
+            showMainMenu(); // Show only the main menu buttons initially
         }
 
         // Auto-focus on password field on page load
@@ -851,10 +893,24 @@
             document.getElementById('portalPassword').focus();
         };
 
-        function showSection(sectionId) {
+        // Function to show only the main menu
+        function showMainMenu() {
+            document.getElementById('mainMenu').style.display = 'grid';
+            document.getElementById('sectionWrapper').style.display = 'none';
             document.querySelectorAll('.section-content').forEach(section => {
                 section.style.display = 'none';
             });
+            document.querySelectorAll('.message').forEach(msg => msg.innerHTML = '');
+        }
+
+        function showSection(sectionId) {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('sectionWrapper').style.display = 'block';
+            
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.style.display = 'none';
+            });
+
             document.getElementById(sectionId + 'Section').style.display = 'block';
             document.querySelectorAll('.message').forEach(msg => msg.innerHTML = '');
 
@@ -870,6 +926,10 @@
             });
             document.getElementById(subOptionId + 'Content').style.display = 'block';
             document.querySelectorAll('.message').forEach(msg => msg.innerHTML = '');
+            isAdminLoggedIn = false; // Reset admin login status on sub-option change
+            document.getElementById('adminPasswordInput').style.display = 'none'; // Hide password field
+            document.getElementById('submitAttendanceButton').disabled = false; // Ensure button is enabled initially
+
             if (subOptionId === 'uploadAttendance') {
                 fetchStudentList();
             } else if (subOptionId === 'studentSummary') {
@@ -981,6 +1041,31 @@
             }
         }
 
+        // --- Admin Override Functions ---
+
+        function promptAdminPassword() {
+            const adminInputDiv = document.getElementById('adminPasswordInput');
+            adminInputDiv.style.display = 'block';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').focus();
+        }
+
+        function adminLogin() {
+            const enteredPass = document.getElementById('adminPassword').value.trim();
+            const messageDiv = document.getElementById('uploadAttendanceMessage');
+            const adminInputDiv = document.getElementById('adminPasswordInput');
+
+            if (enteredPass === ADMIN_PASSWORD) {
+                isAdminLoggedIn = true;
+                displayMessageWithDelay('uploadAttendanceMessage', 'Admin access granted. You can now submit attendance without report checks.', 'success', 5000);
+                adminInputDiv.style.display = 'none';
+            } else {
+                isAdminLoggedIn = false;
+                displayMessageWithDelay('uploadAttendanceMessage', 'Incorrect Admin Password.', 'error', 5000);
+            }
+        }
+
+
         // --- Attendance Functions ---
         async function fetchStudentList() {
             const studentCheckboxesDiv = document.getElementById('studentCheckboxes');
@@ -1007,21 +1092,49 @@
             }
         }
 
+        // MODIFIED: This function now uses browser alerts for all messages, including the warning and final status.
         async function submitAttendance(button) {
             const date = document.getElementById('attendanceDate').value;
-            const studentsPresent = [];
-            const studentsAbsent = [];
-            const studentCheckboxes = document.querySelectorAll('#studentCheckboxes input[type="checkbox"]');
+            const messageDiv = document.getElementById('uploadAttendanceMessage');
 
             if (!date) {
-                displayMessage('uploadAttendanceMessage', 'Please select a date.', 'error');
+                alert('Please select a date.');
                 return;
             }
 
+            const studentCheckboxes = document.querySelectorAll('#studentCheckboxes input[type="checkbox"]');
             if (studentCheckboxes.length === 0) {
-                displayMessage('uploadAttendanceMessage', 'No students to submit attendance for. Please add students first.', 'error');
+                alert('No students to submit attendance for. Please add students first.');
                 return;
             }
+
+            // --- ATTENDANCE CONSTRAINT CHECK (MODIFIED TO USE ALERT) ---
+            if (!isAdminLoggedIn) {
+                showLoading();
+                const reportCheck = await fetchData('checkReportsForDate', { date: date });
+                hideLoading();
+
+                if (!reportCheck.success || !reportCheck.reportStatus.syllabusPresent || !reportCheck.reportStatus.weeklyReportPresent) {
+                    let missingReports = [];
+                    if (!reportCheck.reportStatus.syllabusPresent) missingReports.push('Syllabus Status');
+                    if (!reportCheck.reportStatus.weeklyReportPresent) missingReports.push('Weekly Report');
+
+                    // Use alert() for the WARNING message as requested
+                    alert(`⚠️ WARNING: Before entering attendance for ${date}, you must first upload the following: ${missingReports.join(' and ')}.
+
+Please submit the missing report(s) or use Admin Override to proceed.`);
+                    
+                    // Clear the message box in the footer as the warning is in an alert
+                    messageDiv.innerHTML = '';
+                    
+                    document.getElementById('adminPasswordInput').style.display = 'block'; // Show admin option
+                    return; // Stop submission
+                }
+            }
+            // --- END ATTENDANCE CONSTRAINT CHECK ---
+
+            const studentsPresent = [];
+            const studentsAbsent = [];
 
             studentCheckboxes.forEach(checkbox => {
                 if (checkbox.checked) {
@@ -1031,26 +1144,72 @@
                 }
             });
 
+            let confirmationMessage = '';
             if (studentsAbsent.length > 0) {
-                const confirmation = confirm(`The following students are marked Absent:\n${studentsAbsent.join('\n')}\n\nConfirm submission?`);
-                if (!confirmation) {
-                    return;
-                }
+                confirmationMessage = `The following students are marked Absent:\n${studentsAbsent.join('\n')}\n\nConfirm submission?`;
             } else {
-                 const confirmation = confirm(`All students are marked Present. Confirm submission?`);
-                 if (!confirmation) {
-                    return;
-                }
+                 confirmationMessage = `All students are marked Present. Confirm submission?`;
             }
 
-            const response = await postData('submitAttendance', {
+            const confirmation = confirm(confirmationMessage);
+            if (!confirmation) {
+                return;
+            }
+
+            // Custom submission logic (similar to postData but using alerts for feedback)
+            disableButton(button);
+            showLoading();
+
+            const payload = {
                 date: date,
                 present: studentsPresent.join(','),
                 absent: studentsAbsent.join(',')
-            }, 'uploadAttendanceMessage', button);
+            };
 
-            if (response.success) {
-                document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+            const url = SCRIPT_URL;
+            const data = { action: 'submitAttendance', ...payload };
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(data).toString()
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Final SUCCESS alert
+                    alert('✅ SUCCESS: ' + result.message);
+                    
+                    // Clear admin status after successful submission
+                    isAdminLoggedIn = false;
+                    document.getElementById('adminPasswordInput').style.display = 'none';
+                    // Reset date to today for next entry
+                    document.getElementById('attendanceDate').value = new Date().toISOString().split('T')[0];
+
+                    // Prompt for navigation to Syllabus Status
+                    if (confirm("Attendance submitted successfully. Would you like to go to Syllabus Status now?")) {
+                        showSection('syllabus');
+                    }
+
+                } else {
+                    // Final ERROR alert
+                    alert('❌ ERROR: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Post error:', error);
+                alert('❌ ERROR submitting data: ' + error.message);
+            } finally {
+                hideLoading();
+                enableButton(button);
+                messageDiv.innerHTML = ''; // Clear any previous footer message
             }
         }
 
